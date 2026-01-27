@@ -1,9 +1,6 @@
 # Todo
-visable cursor position
+split text when enter and cursor between text
 implement tab insertion
-do a movable cursor:
-    changing cursor position between text
-
 clickable cursor position
     
 saving
@@ -12,7 +9,7 @@ drag and drop opening
 hold to add more chars or delete them
 
 maybies
-text selection
+text selection (KEyboard with shift, mouse)
 text selection across multiple lines
 copy
 paste
@@ -22,3 +19,4 @@ blinking cursor
 insert button cursor
 
 settings menu
+ctrl + F

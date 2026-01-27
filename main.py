@@ -38,16 +38,41 @@ while running:
                     cursor_pos["col"] = len(rows[cursor_pos["line"]])
                 elif cursor_pos["col"] == 0 and cursor_pos["line"] == 0:
                     continue
-                    # Deleting a char
                 else:
-                    rows[cursor_pos["line"]] = rows[cursor_pos["line"]][:-1]
-                    cursor_pos["col"] = cursor_pos["col"] - 1
+                    # Deleting a char
+                    rows[cursor_pos["line"]].pop(cursor_pos["col"] - 1)
+                    cursor_pos["col"] -= 1
 
             elif re.match(r'^[ -~]+$', event.unicode):
-                rows[cursor_pos["line"]].append(event.unicode)
+                rows[cursor_pos["line"]].insert(cursor_pos["col"], event.unicode)
                 cursor_pos["col"] += 1
 
-        # print(cursor_pos)
+            elif event.key == pygame.K_UP:
+                if cursor_pos["line"] != 0:
+                    cursor_pos["line"] -= 1
+                    if cursor_pos["col"] >= len(rows[cursor_pos["line"]]):
+                        cursor_pos["col"] = len(rows[cursor_pos["line"]]);
+            elif event.key == pygame.K_DOWN:
+                if cursor_pos["line"] < len(rows) - 1:
+                    cursor_pos["line"] += 1
+                    if cursor_pos["col"] >= len(rows[cursor_pos["line"]]):
+                        cursor_pos["col"] = len(rows[cursor_pos["line"]]);
+            elif event.key == pygame.K_LEFT:
+                if cursor_pos["col"] != 0:
+                    cursor_pos["col"] -= 1
+                else:
+                    if cursor_pos["line"] != 0:
+                        cursor_pos["line"] -= 1
+                        cursor_pos["col"] = len(rows[cursor_pos["line"]])
+            elif event.key == pygame.K_RIGHT:
+                if cursor_pos["col"] != len(rows[cursor_pos["line"]]):
+                    cursor_pos["col"] += 1
+                else:
+                    if cursor_pos["line"] != len(rows) - 1:
+                        cursor_pos["line"] += 1
+                        cursor_pos["col"] = 0
+
+        print(cursor_pos)
         # print(rows)
 
     screen.fill("black")
@@ -65,7 +90,7 @@ while running:
     cur_before_text = rows[cursor_pos["line"]][:cursor_pos["col"]]
     vis_cur_x = "".join(cur_before_text)
     vis_cur_x = font.size(vis_cur_x)[0]
-    pygame.draw.rect(screen, "white", (vis_cur_x,text_spacing*i,10,text_spacing))
+    pygame.draw.rect(screen, "white", (vis_cur_x,text_spacing*cursor_pos["line"] - 1,10,text_spacing))
 
 
 
