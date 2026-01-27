@@ -9,6 +9,7 @@ clickable cursor position
 saving
 text opening
 drag and drop opening
+hold to add more chars or delete them
 
 maybies
 text selection

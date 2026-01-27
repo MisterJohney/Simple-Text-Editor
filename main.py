@@ -2,10 +2,15 @@ import pygame
 import sys
 import re
 
+resolution = (1280,720)
+cursor_pos = {"line": 0, "col": 0}
+rows = [[]]
+row_render = []
+
 # pygame setup
 pygame.init()
 pygame.display.set_caption("Basic text editor")
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode(resolution)
 clock = pygame.time.Clock()
 running = True
 
@@ -14,9 +19,6 @@ text_size = 100
 text_spacing = text_size / 2 + 8
 
 font = pygame.font.Font(None, text_size)
-rows = [[]]
-row_render = []
-cursor_pos = {"line": 0, "col": 0}
 
 while running:
     for event in pygame.event.get():
@@ -33,8 +35,8 @@ while running:
                 if cursor_pos["col"] == 0 and cursor_pos["line"] != 0:
                     rows.pop(cursor_pos["line"])
                     cursor_pos["line"] -= 1
-                    cursor_pos["col"] = len(rows[cursor_pos["line"]]) -1
-                if cursor_pos["col"] == 0 and cursor_pos["line"] == 0:
+                    cursor_pos["col"] = len(rows[cursor_pos["line"]])
+                elif cursor_pos["col"] == 0 and cursor_pos["line"] == 0:
                     continue
                     # Deleting a char
                 else:
@@ -45,21 +47,26 @@ while running:
                 rows[cursor_pos["line"]].append(event.unicode)
                 cursor_pos["col"] += 1
 
-        print(cursor_pos)
-        print(rows)
+        # print(cursor_pos)
+        # print(rows)
 
+    screen.fill("black")
 
     row_render = []
-    for row in rows:
+    for i, row in enumerate(rows):
         text = "".join(row)
         row_render.append(font.render(text, True, (255, 255, 255)))
     
     # True Rendering starts here
-    screen.fill("black")
-    i = 0
-    for row in row_render:
+    for i, row in enumerate(row_render):
         screen.blit(row, (0, text_spacing * i))
-        i +=1 
+
+
+    cur_before_text = rows[cursor_pos["line"]][:cursor_pos["col"]]
+    vis_cur_x = "".join(cur_before_text)
+    vis_cur_x = font.size(vis_cur_x)[0]
+    pygame.draw.rect(screen, "white", (vis_cur_x,text_spacing*i,10,text_spacing))
+
 
 
     # flip() the display to put your work on screen
