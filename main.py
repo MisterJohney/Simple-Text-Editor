@@ -1,6 +1,7 @@
 import re
 from tkinter import filedialog
 import yaml
+import math
 
 import pygame
 
@@ -11,9 +12,10 @@ from instance import Instance
 config = yaml.safe_load(open("config.yaml")) # Could to with with open
 
 resolution = (config["res_x"],config["res_y"])
-text_root = (config["text_root_x"], config["text_root_y"])
+text_root = [config["text_root_x"], config["text_root_y"]]
 text_size = config["text_size"]
 line_height = text_size / 2 + 8
+# print(math.ceil(config["res_y"] / line_height))
 c = Cursor()
 k = Keyboard()
 instance = Instance();
@@ -51,7 +53,7 @@ while running:
             running = False
             # Keibord input
         #[<Event(1025-MouseButtonDown {'pos': (7, 580), 'button': 1, 'touch': False, 'window': None})>]
-        # if event.type == pygame.MOUSEBUTTONDOWN:
+        # elif event.type == pygame.MOUSEBUTTONDOWN:
         #     if event.button == 1:
         #         mouse_pos = event.pos
         #
@@ -63,7 +65,12 @@ while running:
         #             instance.cursor.col_pos = 0 # change this in the end 
         #         print(mouse_pos)
 
-        if event.type == pygame.KEYDOWN:
+        elif event.type == pygame.MOUSEWHEEL:
+            if event.y == -1:
+                text_root[1] -= line_height
+            elif event.y == 1:
+                text_root[1] += line_height
+        elif event.type == pygame.KEYDOWN:
             """
             if event.mod & pygame.KMOD_CTRL:
                 if event.key == pygame.K_s:
@@ -97,19 +104,19 @@ while running:
 
     screen.fill("black")
 
-    row_render = []
+    font_render_objs = []
     for i, row in enumerate(instance.rows):
         text = "".join(row)
-        row_render.append(font.render(text, True, (255, 255, 255)))
+        font_render_objs.append(font.render(text, True, (255, 255, 255)))
     
     # True Rendering starts here
-    for i, row in enumerate(row_render):
-        screen.blit(row, (0, line_height * i))
+    for i, row in enumerate(font_render_objs):
+        screen.blit(row, (0, line_height * i + text_root[1]))
 
     text_before_cur = instance.rows[instance.cursor.line_pos][:instance.cursor.col_pos]
     cur_x = "".join(text_before_cur)
     cur_x = font.size(cur_x)[0]
-    cur_rect = (cur_x, line_height*instance.cursor.line_pos, 10, line_height)
+    cur_rect = (cur_x, text_root[1] + line_height*instance.cursor.line_pos, 10, line_height)
     pygame.draw.rect(screen, "white", cur_rect)
 
     # flip() the display to put your work on screen
