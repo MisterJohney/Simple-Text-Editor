@@ -50,6 +50,19 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             # Keibord input
+        #[<Event(1025-MouseButtonDown {'pos': (7, 580), 'button': 1, 'touch': False, 'window': None})>]
+        # if event.type == pygame.MOUSEBUTTONDOWN:
+        #     if event.button == 1:
+        #         mouse_pos = event.pos
+        #
+        #         try:
+        #             instance.cursor.line_pos = int(mouse_pos[1] / line_height)
+        #         except IndexError as e:
+        #             # NOT FINISHED
+        #             instance.cursor.line_pos = len(instance.rows) - 5
+        #             instance.cursor.col_pos = 0 # change this in the end 
+        #         print(mouse_pos)
+
         if event.type == pygame.KEYDOWN:
             """
             if event.mod & pygame.KMOD_CTRL:
@@ -70,6 +83,9 @@ while running:
             #elif event.unicode.isprintable(): # Prints ghost chars for shift, alt, etc.
             elif re.match(r'^[ -~]+$', event.unicode):
                 k.insert_char(instance, event.unicode)
+            elif event.key == pygame.K_TAB:
+                for i in range(4):
+                    k.insert_char(instance, " ")
             elif event.key == pygame.K_UP:
                 k.up(instance)
             elif event.key == pygame.K_DOWN:
