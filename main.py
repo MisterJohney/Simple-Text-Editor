@@ -15,8 +15,7 @@ resolution = (config["res_x"],config["res_y"])
 text_root = [config["text_root_x"], config["text_root_y"]]
 text_size = config["text_size"]
 line_height = text_size / 2 + 8
-# print(math.ceil(config["res_y"] / line_height))
-c = Cursor()
+# c = Cursor()
 k = Keyboard()
 instance = Instance();
 
@@ -28,10 +27,21 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, text_size)
 running = True
 
+def open_file(file_name):
+    try:
+        with open(file_name, "r") as f:
+            instance.rows = []
+            for line in f:
+                instance.rows.append(list(line.rstrip()))
+            instance.cursor.line_pos = len(instance.rows) - 1
+            instance.cursor.col_pos = len(instance.rows[-1])
+        
+    except Exception as e:
+        print(e)
 
-"""
+
 def browser_open_file():
-    return filedialog.askopenfilename(initialdir = "/",
+    return filedialog.askopenfilename(initialdir = "~/projects/python/simple_text_edit/",
                                           title = "Select a File",
                                           filetypes = (("Text files",
                                                         "*.txt*"),
@@ -45,10 +55,10 @@ def browser_save_file():
     if file_name is None:
         return
     return file_name.name
-"""
 
 while running:
     for event in pygame.event.get():
+        
         if event.type == pygame.QUIT:
             running = False
             # Keibord input
@@ -70,18 +80,24 @@ while running:
                 text_root[1] -= line_height
             elif event.y == 1:
                 text_root[1] += line_height
+
+        elif event.type == pygame.DROPFILE:
+            open_file(event.file)
+
         elif event.type == pygame.KEYDOWN:
-            """
             if event.mod & pygame.KMOD_CTRL:
                 if event.key == pygame.K_s:
                     # Make this gooder
                     file_name = browser_save_file()
                     with open(file_name, "w") as f:
                         for row in instance.rows:
-                        f.write("".join(row))
-                        f.write("\n")
-                """
+                            f.write("".join(row))
+                            f.write("\n")
 
+                if event.key == pygame.K_o:
+                    file_name = browser_open_file()
+                    if file_name:
+                        open_file(file_name)
 
             if event.key == pygame.K_RETURN:
                 k.new_line(instance)

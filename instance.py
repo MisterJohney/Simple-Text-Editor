@@ -81,8 +81,7 @@ I'm here in Nigeria alone in my palace (One weird trick)
 I need you to save me, I have too much money (Discovered by a mom)
 The government hates me but I know you love me (One weird trick)
 I'm desperate and wealthy, I'm single and Christian (Discovered by a mom)
-You're all I have left and I- (One-)
-"""
+You're all I have left and I- (One-)"""
 
 
 
@@ -90,8 +89,8 @@ You're all I have left and I- (One-)
 class Instance:
     def __init__(self):
         self.cursor = Cursor()
-        # self.rows = [[]]
-        self.rows = []
-        for line in test_text.split("\n"):
-            self.rows.append(list(line))
+        self.rows = [[]]
+        # self.rows = []
+        # for line in test_text.split("\n"):
+        #     self.rows.append(list(line))
 
