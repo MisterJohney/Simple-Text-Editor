@@ -5,6 +5,7 @@ hold to add more chars or delete them
 
 
 ## maybies
+Make reading and writing file more robust
 saving file check if overwritten
 Ctrl + Z
 Ctrl + R

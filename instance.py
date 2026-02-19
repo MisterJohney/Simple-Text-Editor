@@ -86,11 +86,10 @@ You're all I have left and I- (One-)"""
 
 class Instance:
     def __init__(self):
-        self.rows = [[]]
         self.line_pos = 0
         self.col_pos = 0
 
+        self.rows = [[]]
         # self.rows = []
         # for line in test_text.split("\n"):
         #     self.rows.append(list(line))
-
