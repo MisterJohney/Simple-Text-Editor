@@ -6,7 +6,6 @@ import math
 import pygame
 
 from keyboard import Keyboard
-from cursor import Cursor
 from instance import Instance
 
 config = yaml.safe_load(open("config.yaml")) # Could to with with open
@@ -15,7 +14,6 @@ resolution = (config["res_x"],config["res_y"])
 text_root = [config["text_root_x"], config["text_root_y"]]
 text_size = config["text_size"]
 line_height = text_size / 2 + 8
-# c = Cursor()
 k = Keyboard()
 instance = Instance();
 
@@ -33,8 +31,8 @@ def open_file(file_name):
             instance.rows = []
             for line in f:
                 instance.rows.append(list(line.rstrip()))
-            instance.cursor.line_pos = len(instance.rows) - 1
-            instance.cursor.col_pos = len(instance.rows[-1])
+            instance.line_pos = len(instance.rows) - 1
+            instance.col_pos = len(instance.rows[-1])
         
     except Exception as e:
         print(e)
@@ -61,19 +59,32 @@ while running:
         
         if event.type == pygame.QUIT:
             running = False
-            # Keibord input
-        #[<Event(1025-MouseButtonDown {'pos': (7, 580), 'button': 1, 'touch': False, 'window': None})>]
-        # elif event.type == pygame.MOUSEBUTTONDOWN:
-        #     if event.button == 1:
-        #         mouse_pos = event.pos
-        #
-        #         try:
-        #             instance.cursor.line_pos = int(mouse_pos[1] / line_height)
-        #         except IndexError as e:
-        #             # NOT FINISHED
-        #             instance.cursor.line_pos = len(instance.rows) - 5
-        #             instance.cursor.col_pos = 0 # change this in the end 
-        #         print(mouse_pos)
+
+        # Keibord input
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            continue
+            if event.button == 1:
+                mouse_pos = event.pos
+
+
+
+                line_num = int(mouse_pos[1] / line_height)
+
+                if line_num < len(instance.rows):
+                    instance.line_pos = line_num
+                else:
+                    instance.line_pos = len(instance.rows) - 1
+                    instance.col_pos = len(instance.rows[-1])
+
+                # current_line = "".join(instance.rows[line_num])
+                # col_len = font.size(current_line)[0]
+                # if col_len < mouse_pos[0]:
+                #     instance.col_pos = len(current_line)
+                # else:
+                #     instance.col_pos = 0 # change this in the end 
+
+                print(instance.line_pos, instance.col_pos)
+
 
         elif event.type == pygame.MOUSEWHEEL:
             if event.y == -1:
@@ -129,10 +140,10 @@ while running:
     for i, row in enumerate(font_render_objs):
         screen.blit(row, (0, line_height * i + text_root[1]))
 
-    text_before_cur = instance.rows[instance.cursor.line_pos][:instance.cursor.col_pos]
+    text_before_cur = instance.rows[instance.line_pos][:instance.col_pos]
     cur_x = "".join(text_before_cur)
     cur_x = font.size(cur_x)[0]
-    cur_rect = (cur_x, text_root[1] + line_height*instance.cursor.line_pos, 10, line_height)
+    cur_rect = (cur_x, text_root[1] + line_height*instance.line_pos, 10, line_height)
     pygame.draw.rect(screen, "white", cur_rect)
 
     # flip() the display to put your work on screen

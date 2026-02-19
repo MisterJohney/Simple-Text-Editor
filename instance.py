@@ -1,5 +1,3 @@
-from cursor import Cursor
-
 test_text = """[Verse 1]
 I'm offering to you a business proposal
 My new weight loss methods are at your disposal
@@ -88,8 +86,10 @@ You're all I have left and I- (One-)"""
 
 class Instance:
     def __init__(self):
-        self.cursor = Cursor()
         self.rows = [[]]
+        self.line_pos = 0
+        self.col_pos = 0
+
         # self.rows = []
         # for line in test_text.split("\n"):
         #     self.rows.append(list(line))

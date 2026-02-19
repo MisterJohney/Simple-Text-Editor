@@ -1,11 +1,10 @@
 # Todo
-clickable cursor position
 
-    
+clickable cursor position
 hold to add more chars or delete them
 
 
-maybies
+## maybies
 saving file check if overwritten
 Ctrl + Z
 Ctrl + R
