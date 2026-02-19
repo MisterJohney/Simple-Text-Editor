@@ -19,9 +19,9 @@ paste
 cut
 top bar
 changable screen size
-blinking cursor
 insert button cursor
 fukin tabs
 
 settings menu
 ctrl + F
+ctrl + A

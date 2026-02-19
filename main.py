@@ -28,6 +28,7 @@ while running:
 
         # Keibord input
         elif event.type == pygame.MOUSEBUTTONDOWN:
+
             continue
             if event.button == 1:
                 mouse_pos = event.pos
@@ -109,7 +110,12 @@ while running:
     cur_x = "".join(text_before_cur)
     cur_x = font.size(cur_x)[0]
     cur_rect = (cur_x, text.root_y + text.line_height*instance.line_pos, 10, text.line_height)
-    pygame.draw.rect(screen, "white", cur_rect)
+
+    # Blinking
+    time = pygame.time.get_ticks()
+    blink_interval = time // 1000
+    if blink_interval % 2:
+        pygame.draw.rect(screen, "white", cur_rect)
 
     # flip() the display to put your work on screen
     pygame.display.flip()
