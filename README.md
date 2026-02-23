@@ -3,8 +3,10 @@
 clickable cursor position
 hold to add more chars or delete them
 
+implement cursor positioning with mouse even if scrolled
 
 ## maybies
+TEXT SELECTION
 Make reading and writing file more robust
 saving file check if overwritten
 Ctrl + Z
@@ -20,7 +22,7 @@ cut
 top bar
 changable screen size
 insert button cursor
-fukin tabs
+replacing text when starting writing on selected text
 
 settings menu
 ctrl + F

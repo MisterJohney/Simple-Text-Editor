@@ -13,7 +13,7 @@ class Keyboard:
             row = instance.rows[instance.line_pos]
             instance.rows.pop(instance.line_pos)
             instance.line_pos -= 1
-            instance.col_pos = len(instance.rows[instance.line_pos])
+            instance.col_pos = instance.current_line_length()
             for i, item in enumerate(row):
                 instance.rows[instance.line_pos].insert(instance.col_pos + i, row[i])
         else:
@@ -28,14 +28,14 @@ class Keyboard:
     def up(self, instance):
         if instance.line_pos != 0:
             instance.line_pos -= 1
-            if instance.col_pos >= len(instance.rows[instance.line_pos]):
-                instance.col_pos = len(instance.rows[instance.line_pos])
+            if instance.col_pos >= instance.current_line_length():
+                instance.col_pos = instance.current_line_length()
 
     def down(self, instance):
         if instance.line_pos < len(instance.rows) - 1:
             instance.line_pos += 1
-            if instance.col_pos >= len(instance.rows[instance.line_pos]):
-                instance.col_pos = len(instance.rows[instance.line_pos])
+            if instance.col_pos >= instance.current_line_length():
+                instance.col_pos = instance.current_line_length()
 
     def left(self, instance):
         if instance.col_pos != 0:
@@ -43,10 +43,10 @@ class Keyboard:
         else:
             if instance.line_pos != 0:
                 instance.line_pos -= 1
-                instance.col_pos = len(instance.rows[instance.line_pos])
+                instance.col_pos = instance.current_line_length()
 
     def right(self, instance):
-        if instance.col_pos != len(instance.rows[instance.line_pos]):
+        if instance.col_pos != instance.current_line_length():
             instance.col_pos += 1
         else:
             if instance.line_pos != len(instance.rows) - 1:

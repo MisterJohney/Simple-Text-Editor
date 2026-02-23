@@ -20,6 +20,11 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, text.size)
 running = True
 
+def text_width_before_cur():
+    text_before_cur = instance.rows[instance.line_pos][:instance.col_pos]
+    cur_x = "".join(text_before_cur)
+    return font.size(cur_x)[0]
+
 while running:
     for event in pygame.event.get():
         
@@ -28,27 +33,48 @@ while running:
 
         # Keibord input
         elif event.type == pygame.MOUSEBUTTONDOWN:
-
-            continue
             if event.button == 1:
                 mouse_pos = event.pos
+                print(mouse_pos)
 
                 line_num = int(mouse_pos[1] / text.line_height)
 
-                if line_num < len(instance.rows):
-                    instance.line_pos = line_num
-                else:
+                if line_num > len(instance.rows):
                     instance.line_pos = len(instance.rows) - 1
                     instance.col_pos = len(instance.rows[-1])
+                else:
+                    instance.line_pos = line_num
 
-                # current_line = "".join(instance.rows[line_num])
-                # col_len = font.size(current_line)[0]
-                # if col_len < mouse_pos[0]:
-                #     instance.col_pos = len(current_line)
-                # else:
-                #     instance.col_pos = 0 # change this in the end 
+                    current_line = "".join(instance.rows[instance.line_pos])
+                    col_width_px = font.size(current_line)[0]
+                    if col_width_px <= mouse_pos[0]:
+                        instance.col_pos = instance.current_line_length()
+                    else:
+                        # Damm, this fucking sucks
+                        instance.col_pos = int((mouse_pos[0] / col_width_px) * instance.current_line_length())
+                        # tmp_col_pos = instance.col_pos
+                        instance.col_pos -= 1
+                        col_width_m1_char = text_width_before_cur()
+                        instance.col_pos += 2
+                        col_width_p1_char = text_width_before_cur()
+                        instance.col_pos -= 1
 
-                print(instance.line_pos, instance.col_pos)
+                        # while mouse_pos[0] !< col_width_p1_char && mouse_pos[0] !> col_width_m1_char:
+                        #     if mouse_pos > col_width_p1_char:
+                        #
+                        # recalculated_col_width_px = text_width_before_cur()
+
+                        # avg_char_width = int(col_width_px / instance.current_line_length())
+                        # instance.col_pos = int(col_width_px / avg_char_width)
+                        # text_before_cur = instance.rows[instance.line_pos][:instance.col_pos]
+                        # instance.col_pos = 0 # change this in the end 
+
+                        # print("cursor pos:")
+                        # print(instance.line_pos, instance.col_pos)
+                        # print("text last x pos:")
+                        # print(recalculated_col_width_px)
+                        # print("Mouse x pos:")
+                        # print(mouse_pos[0])
 
 
         elif event.type == pygame.MOUSEWHEEL:
@@ -61,6 +87,7 @@ while running:
             f.open(event.file, instance)
 
         elif event.type == pygame.KEYDOWN:
+            print(instance.line_pos, instance.col_pos)
             if event.mod & pygame.KMOD_CTRL:
                 if event.key == pygame.K_s:
                     # Make this gooder
@@ -106,10 +133,7 @@ while running:
         screen.blit(row, (0, text.line_height * i + text.root_y))
 
     # Cursor rendering
-    text_before_cur = instance.rows[instance.line_pos][:instance.col_pos]
-    cur_x = "".join(text_before_cur)
-    cur_x = font.size(cur_x)[0]
-    cur_rect = (cur_x, text.root_y + text.line_height*instance.line_pos, 10, text.line_height)
+    cur_rect = (text_width_before_cur(), text.root_y + text.line_height*instance.line_pos, 10, text.line_height)
 
     # Blinking
     time = pygame.time.get_ticks()

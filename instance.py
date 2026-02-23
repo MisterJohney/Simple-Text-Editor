@@ -89,7 +89,16 @@ class Instance:
         self.line_pos = 0
         self.col_pos = 0
 
-        self.rows = [[]]
-        # self.rows = []
-        # for line in test_text.split("\n"):
-        #     self.rows.append(list(line))
+        # Doesn't do anything rn, but made for selection
+        self.vs_mode = False
+        self.vs_line_pos = None
+        self.vs_line_pos = None
+
+        # self.rows = [[]]
+        self.rows = []
+        for line in test_text.split("\n"):
+            self.rows.append(list(line))
+
+
+    def current_line_length(self):
+        return len(self.rows[self.line_pos])
