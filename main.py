@@ -4,7 +4,8 @@ import pygame
 
 from keyboard import Keyboard
 from instance import Instance
-from util import Resolution, Text
+from text import Text
+from util import Resolution
 from file import File
 
 k = Keyboard()
@@ -37,7 +38,7 @@ while running:
                 mouse_pos = event.pos
                 print(mouse_pos)
 
-                line_num = int(mouse_pos[1] / text.line_height)
+                line_num = int(mouse_pos[1] / text.line_height) - text.scroll_dist
 
                 if line_num > len(instance.rows):
                     instance.line_pos = len(instance.rows) - 1
@@ -78,10 +79,7 @@ while running:
 
 
         elif event.type == pygame.MOUSEWHEEL:
-            if event.y == -1:
-                text.root_y -= text.line_height
-            elif event.y == 1:
-                text.root_y += text.line_height
+            text.scroll(instance, event.y)
 
         elif event.type == pygame.DROPFILE:
             f.open(event.file, instance)
