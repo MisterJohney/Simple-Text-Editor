@@ -38,12 +38,14 @@ while running:
                 mouse_pos = event.pos
                 print(mouse_pos)
 
+                # Calculate line number
                 line_num = int(mouse_pos[1] / text.line_height) - text.scroll_dist
 
                 if line_num > len(instance.rows):
                     instance.line_pos = len(instance.rows) - 1
                     instance.col_pos = len(instance.rows[-1])
                 else:
+                    # Calculate column
                     instance.line_pos = line_num
 
                     current_line = "".join(instance.rows[instance.line_pos])
@@ -51,31 +53,34 @@ while running:
                     if col_width_px <= mouse_pos[0]:
                         instance.col_pos = instance.current_line_length()
                     else:
-                        # Damm, this fucking sucks
-                        instance.col_pos = int((mouse_pos[0] / col_width_px) * instance.current_line_length())
-                        # tmp_col_pos = instance.col_pos
-                        instance.col_pos -= 1
-                        col_width_m1_char = text_width_before_cur()
-                        instance.col_pos += 2
-                        col_width_p1_char = text_width_before_cur()
-                        instance.col_pos -= 1
 
-                        # while mouse_pos[0] !< col_width_p1_char && mouse_pos[0] !> col_width_m1_char:
-                        #     if mouse_pos > col_width_p1_char:
-                        #
-                        # recalculated_col_width_px = text_width_before_cur()
+                        # Ak, nē... Čatiņš točna aizvietos manu darbu
+                        target_width = mouse_pos[0]
 
-                        # avg_char_width = int(col_width_px / instance.current_line_length())
-                        # instance.col_pos = int(col_width_px / avg_char_width)
-                        # text_before_cur = instance.rows[instance.line_pos][:instance.col_pos]
-                        # instance.col_pos = 0 # change this in the end 
+                        low = 0
+                        high = instance.current_line_length()
 
-                        # print("cursor pos:")
-                        # print(instance.line_pos, instance.col_pos)
-                        # print("text last x pos:")
-                        # print(recalculated_col_width_px)
-                        # print("Mouse x pos:")
-                        # print(mouse_pos[0])
+                        while low < high:
+                            mid = (low + high) // 2
+                            instance.col_pos = mid
+                            width = text_width_before_cur()
+
+                            if width < target_width:
+                                low = mid + 1
+                            else:
+                                high = mid
+
+                        # choose nearest
+                        instance.col_pos = max(0, low - 1)
+                        w1 = text_width_before_cur()
+
+                        instance.col_pos = low
+                        w2 = text_width_before_cur()
+
+                        if abs(w2 - target_width) < abs(w1 - target_width):
+                            instance.col_pos = low
+                        else:
+                            instance.col_pos = max(0, low - 1)
 
 
         elif event.type == pygame.MOUSEWHEEL:
@@ -135,9 +140,10 @@ while running:
 
     # Blinking
     time = pygame.time.get_ticks()
-    blink_interval = time // 1000
-    if blink_interval % 2:
-        pygame.draw.rect(screen, "white", cur_rect)
+
+    #blink_interval = time // 1000
+    # if blink_interval % 2:
+    pygame.draw.rect(screen, "white", cur_rect)
 
     # flip() the display to put your work on screen
     pygame.display.flip()

@@ -1,10 +1,9 @@
 # Todo
-clickable cursor x position
 hold to add more chars or delete them
 
 ### Scrolling
-- make cursor position top of the screen if scrolled past and starting to type
-- scrolling past end is ok i guess
+- (I think that this is done) make cursor position top of the screen if scrolled past and starting to type
+- scrolling past end is ok i guess (but maybie someday change this)
 
 ### Text selection
 - implement TEXT SELECTION

@@ -1,4 +1,4 @@
-test_text = """[Verse 1]
+test_text = """iiiiiiiiiiiiiiiiiiiiiiiiiiiwwwwwwwwww[Verse 1]
 I'm offering to you a business proposal
 My new weight loss methods are at your disposal
 For pennies a day get your college diploma
